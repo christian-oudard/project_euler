@@ -1,13 +1,13 @@
 # this is horribly ineffecient
 def primes_up_to(n):
-	candidates = range(2, n+1)
+	candidates = set(range(2, n+1))
 	for i in up_to_sqrt_of(n):
 		m = i
 		while m <= n:
 			m += i
 			if m in candidates:
 				candidates.remove(m)
-	return candidates
+	return sorted(list(candidates))
 
 def prime_factorization(n):
 	""" Return the prime factors of n, as a list, including repeats. """
