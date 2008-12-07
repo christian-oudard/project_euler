@@ -8,4 +8,4 @@ def iter_fibonacci(limit):
 		yield c
 		a, b, = b, c
 
-print sum(f for f in iter_fibonacci(4000000) if f % 2 == 0)
+print(sum(f for f in iter_fibonacci(4000000) if f % 2 == 0))
