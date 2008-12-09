@@ -1,11 +1,15 @@
 import subprocess
+import time
 
 def main():
     for problem, solution in problems:
+        start = time.time()
         output = subprocess.getoutput('python3 %s.py' % problem)
+        finish = time.time()
         print('%s: %s' % (problem, output))
         if int(output) != solution:
             print('^^^ WRONG')
+        print('%.3fs' % (finish - start,))
 
 problems = (
     ('001', 233168),
