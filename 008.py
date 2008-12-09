@@ -1,3 +1,5 @@
+from utility import product
+
 digits = '\
 73167176531330624919225119674426574742355349194934\
 96983520312774506326239578318016984801869478851843\
@@ -21,12 +23,6 @@ digits = '\
 71636269561882670428252483600823257530420752963450'
 
 section_size = 5
-
-def product(iterable):
-    prod = 1
-    for n in iterable:
-        prod *= n
-    return prod
 
 results = {}
 for i in range(len(digits) + 1 - section_size):

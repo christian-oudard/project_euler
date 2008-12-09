@@ -1,4 +1,5 @@
-# this is horribly ineffecient
+from math import sqrt
+
 def primes_up_to(n):
 	candidates = set(range(2, n+1))
 	for i in up_to_sqrt_of(n):
@@ -45,6 +46,22 @@ def is_prime(n):
 			return False
 	return True
 
-from math import sqrt
 def up_to_sqrt_of(n):
 	return range(2, int(sqrt(n)) + 1)
+
+def product(iterable):
+    prod = 1
+    for n in iterable:
+        prod *= n
+    return prod
+
+# not yet used
+#def perfect_squares_up_to(n):
+#    perfect_squares = set()
+#    i = s = 1
+#    while s <= n:
+#        perfect_squares.add(s)
+#        i += 1
+#        s = i**2
+#    return perfect_squares
+
