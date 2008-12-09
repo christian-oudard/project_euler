@@ -5,7 +5,7 @@ def main():
 	factorization_dicts = [frequency_count(prime_factorization(n)) for n in range(2, limit)]
 	answer = product(flatten_frequencies(merge_frequency_counts(factorization_dicts)))
 	print(answer)
-	print('pass' if is_divisible_up_to_limit(answer, limit) else 'fail')
+	#print('pass' if is_divisible_up_to_limit(answer, limit) else 'fail')
 
 def is_divisible_up_to_limit(n, limit):
 	if n < limit:

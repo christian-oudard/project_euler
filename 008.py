@@ -31,5 +31,6 @@ for i in range(len(digits) + 1 - section_size):
     results[p] = section
 
 m = max(results.keys())
-s = ' * '.join(str(d) for d in results[m])
-print('%s = %i' % (s, m))
+#s = ' * '.join(str(d) for d in results[m])
+#print('%s = %i' % (s, m))
+print(m)

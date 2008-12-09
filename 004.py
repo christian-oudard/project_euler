@@ -20,4 +20,5 @@ for a, b in iter_all_3digit_pairs():
 m = max(l)
 a, b = d[m]
 assert(a * b == m)
-print('%i * %i = %i' % (a, b, m))
+#print('%i * %i = %i' % (a, b, m))
+print(m)
