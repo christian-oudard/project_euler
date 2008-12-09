@@ -1,24 +1,21 @@
+# find the largest palindrome that is the product of two three-digit numbers
+
+# some improvements over brute force:
+# the number is of the form abccba, or
+# 100000*a + 10000*b + 1000*c + 100*c + 10*b + c
+# = 100001*a + 10010*b + 1001*c
+# = 11 * (9091*a + 910*b + 11*c)
+# so it must be evenly divisible by 11, and so must at least one of its factors.
+
 def is_palindrome(num):
     s = str(num)
-    return s == str_reverse(s)
+    return s == ''.join(reversed(s))
 
-def str_reverse(s):
-    return ''.join(reversed(s))
+results = []
+for a in range(900, 1000):
+    for b in range(902, 1000, 11): # go up by 11s
+        product = a * b
+        if is_palindrome(product):
+            results.append(product)
 
-def iter_all_3digit_pairs():
-    for a in range(100, 1000):
-        for b in range(a, 1000):
-            yield a, b
-
-l = []
-d = {}
-for a, b in iter_all_3digit_pairs():
-    product = a * b
-    if is_palindrome(product):
-        l.append(product)
-        d[product] = (a, b)
-m = max(l)
-a, b = d[m]
-assert(a * b == m)
-#print('%i * %i = %i' % (a, b, m))
-print(m)
+print(max(results))
