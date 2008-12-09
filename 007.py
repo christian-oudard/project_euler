@@ -1,4 +1,3 @@
-from utility import primes_up_to
+from utility import primes, nth
 
-primes = primes_up_to(110000)
-print(primes[10000])
+print(nth(primes(), 10000))

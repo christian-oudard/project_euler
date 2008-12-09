@@ -1,14 +1,26 @@
 from math import sqrt
+import time
+import itertools
+
+def primes():
+    composites = {} # a mapping from composite numbers to the smallest prime that is a factor of it (its witness)
+    n = 2 # the current number being considered as a prime
+    while True:
+        if n not in composites:
+            # not a composite, therefore prime
+            yield n
+            composites[n**2] = n # the next unseen composite number here will be n squared
+        else: # n is a composite number
+            # find the next unseen composite number with the same witness as n
+            witness = composites.pop(n)
+            next = n + witness
+            while next in composites:
+                next += witness
+            composites[next] = witness
+        n += 1
 
 def primes_up_to(n):
-	candidates = set(range(2, n+1))
-	for i in up_to_sqrt_of(n):
-		m = i
-		while m <= n:
-			m += i
-			if m in candidates:
-				candidates.remove(m)
-	return sorted(list(candidates))
+    return list(itertools.takewhile(lambda p: p <= n, primes()))
 
 def prime_factorization(n):
 	""" Return the prime factors of n, as a list, including repeats. """
@@ -65,3 +77,6 @@ def product(iterable):
 #        s = i**2
 #    return perfect_squares
 
+def nth(iterable, n):
+    """Get the Nth item in the iterable."""
+    return list(itertools.islice(iterable, n, n+1))[0]
