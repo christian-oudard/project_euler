@@ -80,3 +80,10 @@ def product(iterable):
 def nth(iterable, n):
     """Get the Nth item in the iterable."""
     return list(itertools.islice(iterable, n, n+1))[0]
+
+def all_pairs(iterable):
+    enumerated_values = list(enumerate(iterable))
+    for low_index, first_item in enumerated_values:
+        for high_index, second_item in enumerated_values[low_index + 1:]:
+            yield (first_item, second_item)
+
