@@ -1,4 +1,4 @@
-from math import sqrt
+import math
 import time
 import itertools
 
@@ -30,7 +30,7 @@ def prime_factorization(n):
     """
     factors = []
     while True:
-        for p in up_to(n, primes()):
+        for p in up_to(math.ceil(math.sqrt(n)), itertools.count(2)):
             quotient, remainder = divmod(n, p)
             if remainder == 0:
                 factors.append(p)
@@ -56,7 +56,7 @@ def is_prime(n):
 	return True
 
 def up_to_sqrt_of(n):
-	return range(2, int(sqrt(n)) + 1)
+	return range(2, math.ceil(math.sqrt(n)))
 
 def product(iterable):
     prod = 1
