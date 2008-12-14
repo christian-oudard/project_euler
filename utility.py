@@ -19,8 +19,8 @@ def primes():
             composites[next] = witness
         n += 1
 
-def primes_up_to(n):
-    return list(itertools.takewhile(lambda p: p <= n, primes()))
+def up_to(n, iterable):
+    return list(itertools.takewhile(lambda i: i <= n, iterable))
 
 def prime_factorization(n):
 	""" Return the prime factors of n, as a list, including repeats. """
