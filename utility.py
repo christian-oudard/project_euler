@@ -23,25 +23,22 @@ def up_to(n, iterable):
     return list(itertools.takewhile(lambda i: i <= n, iterable))
 
 def prime_factorization(n):
-	""" Return the prime factors of n, as a list, including repeats. """
-	factors = [n]
+    """
+    Return the prime factors of n, as a list, including repeats.
+    >>> prime_factorization(12)
+    [2, 2, 3]
+    """
+    factors = []
+    while True:
+        for p in up_to(n, primes()):
+            quotient, remainder = divmod(n, p)
+            if remainder == 0:
+                factors.append(p)
+                n = quotient
+                break
+        else:
+            return factors
 
-	def next_split():
-		for f in factors:
-			for i in up_to_sqrt_of(f):
-				if f % i == 0:
-					return f, (i, f//i)
-
-	while True:
-		s = next_split()
-		if not s: 
-			break
-		f, (a, b) = s
-		factors.remove(f)
-		factors.extend((a, b))
-
-	return sorted(factors)
-			
 def test_prime_factorization(limit=1000):
 	for i in range(2, limit):
 		pf = prime_factorization(i)
@@ -87,3 +84,6 @@ def all_pairs(iterable):
         for high_index, second_item in enumerated_values[low_index + 1:]:
             yield (first_item, second_item)
 
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
