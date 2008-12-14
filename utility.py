@@ -2,22 +2,27 @@ import math
 import time
 import itertools
 
+_n = 2 # the current number being considered as a prime
+_composites = {} # a mapping from composite numbers to the smallest prime that is a factor of it (its witness)
+_primes = [] # primes found so far
 def primes():
-    composites = {} # a mapping from composite numbers to the smallest prime that is a factor of it (its witness)
-    n = 2 # the current number being considered as a prime
+    global _n, _composites, _primes
+    for p in _primes:
+        yield p
     while True:
-        if n not in composites:
+        if _n not in _composites:
             # not a composite, therefore prime
-            yield n
-            composites[n**2] = n # the next unseen composite number here will be n squared
+            _primes.append(_n)
+            yield _n
+            _composites[_n**2] = _n # the next unseen composite number here will be n squared
         else: # n is a composite number
             # find the next unseen composite number with the same witness as n
-            witness = composites.pop(n)
-            next = n + witness
-            while next in composites:
+            witness = _composites.pop(_n)
+            next = _n + witness
+            while next in _composites:
                 next += witness
-            composites[next] = witness
-        n += 1
+            _composites[next] = witness
+        _n += 1
 
 def up_to(n, iterable):
     return list(itertools.takewhile(lambda i: i <= n, iterable))
@@ -30,7 +35,7 @@ def prime_factorization(n):
     """
     factors = []
     while True:
-        for p in up_to(math.ceil(math.sqrt(n)), itertools.count(2)):
+        for p in up_to(math.ceil(math.sqrt(n)), primes()):
             quotient, remainder = divmod(n, p)
             if remainder == 0:
                 factors.append(p)
