@@ -47,14 +47,6 @@ def prime_factorization(n):
             factors.append(n)
             return factors
 
-def test_prime_factorization(limit=1000):
-	for i in range(2, limit):
-		pf = prime_factorization(i)
-		#print pf
-		for p in pf:
-			assert(is_prime(p))
-		assert(product(pf) == i)
-		
 def is_prime(n):
 	if n < 2:
 		return False
