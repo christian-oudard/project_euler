@@ -1,11 +1,44 @@
+import time
 from utility import all_pairs
 
-radius = 2
-radius2 = radius ** 2
+#TODO speed optimization
+# don't duplicate triangles, track visited segments
+# use symmetry, canonical positioning
+# profiling optimization
+# optimize multiplications
+
+known_solutions = {
+    2: 8,
+    3: 360,
+    4: 2768,
+    5: 10600,
+    6: 45976,
+    7: 111368,
+    8: 270720,
+    9: 591152,
+    10: 1101232,
+    11: 2039688,
+}
 
 def main():
+    start_all = time.time()
+    for r in range(2, 7):
+        print('---')
+        print('r =', r)
+        start = time.time()
+        t = find_triangles(r)
+        print(t)
+        assert(known_solutions[r] == t)
+        end = time.time()
+        print('%.3fs' % (end - start))
+    end_all = time.time()
+    print('===')
+    print('total')
+    print('%.3fs' % (end_all - start_all))
+
+def find_triangles(radius):
+    radius2 = radius ** 2
     # generate points in circle, except origin
-    #TODO precompute x2 and y2 for whole range
     r = range(-radius + 1, radius)
     points = set()
     for x in r:
@@ -15,14 +48,20 @@ def main():
     points.remove((0,0))
 
     #print(points)
+    triangles = set()
     for p1, p2 in all_pairs(points):
-        if line_crosses_origin(p1, p2):
+        # test if p1-p2 crosses the origin
+        if cmp_line(p1, p2, (0,0)) == 0:
             continue
-        #stub
-
-    # when a triangle is found, remove its segments from the set
-    # no, triangles can duplicate one line segment
-    # find a canonical version of the triangle... designate triangles with a primary segment and far point
+        # get the set of points p3 that is on the side of the line p1-(0,0)
+        # farthest from p2, and likewise for p2-(0,0). each of these points
+        # completes a triangle (p1, p2, p3) that contains the origin.
+        #TODO prevent duplication of triangles, reducing reliance on sets
+        p3_set = (partition(points, p1, (0,0), p2, reverse=True) &
+                  partition(points, p2, (0,0), p1, reverse=True))
+        for p3 in p3_set:
+            triangles.add(frozenset((p1, p2, p3)))
+    return len(triangles)
 
 def cmp_line(l1, l2, p):
     """
@@ -51,7 +90,7 @@ def cmp_line(l1, l2, p):
     dx = x2 - x1
     return cmp(y * dx, dy * (x - x1) + y1 * dx)
 
-def partition(points, l1, l2, s):
+def partition(points, l1, l2, s, reverse=False):
     """
     Partition a set of points by a line.
 
@@ -69,56 +108,15 @@ def partition(points, l1, l2, s):
     if l1 == l2:
         raise ValueError('l1 equals l2')
     sign = cmp_line(l1, l2, s)
+    if reverse:
+        sign = -sign
     if sign == 0:
         raise ValueError('s is on the line l1 l2')
     return set(p for p in points if cmp_line(l1, l2, p) == sign)
 
-def line_crosses_origin(l1, l2):
-    """
-    See whether a line segment with integral endpoints contains the origin.
-
-    >>> line_crosses_origin((0,0), (0,0))
-    True
-    >>> line_crosses_origin((-1,0), (1,0))
-    True
-    >>> line_crosses_origin((0,-1), (0,1))
-    True
-    >>> line_crosses_origin((-1,-1), (1,1))
-    True
-    >>> line_crosses_origin((1,1), (2,2))
-    False
-    >>> line_crosses_origin((0,1), (1,2))
-    False
-    """
-    x1, y1 = l1
-    x2, y2 = l2
-    # test that line segment intersects both axes
-    if (not in_range(0, x1, x2) or
-        not in_range(0, y1, y2)):
-        return False
-    # test that line, if infinite, would pass through origin
-    return cmp_line(l1, l2, (0,0)) == 0
-
-def in_range(n, lo, hi):
-    """
-    Test that a number n is in the range [lo, hi] inclusive.
-
-    >>> in_range(0, 0, 0)
-    True
-    >>> in_range(-1, 0, 1)
-    False
-    >>> in_range(0, -1, 1)
-    True
-    >>> in_range(0, 1, -1)
-    True
-    """
-    if lo > hi:
-        (lo, hi) = (hi, lo)
-    return lo <= n <= hi
-
 def mag2(x, y):
     return x**2 + y**2
 
-#main()
-import doctest
-doctest.testmod()
+main()
+#import doctest
+#doctest.testmod()
