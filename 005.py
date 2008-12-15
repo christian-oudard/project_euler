@@ -1,29 +1,11 @@
-from utility import is_prime, prime_factorization
+from collections import defaultdict
+from utility import is_prime, prime_factorization, frequency_count, product
 
 def main():
 	limit = 20
 	factorization_dicts = [frequency_count(prime_factorization(n)) for n in range(2, limit)]
 	answer = product(flatten_frequencies(merge_frequency_counts(factorization_dicts)))
 	print(answer)
-	#print('pass' if is_divisible_up_to_limit(answer, limit) else 'fail')
-
-def is_divisible_up_to_limit(n, limit):
-	if n < limit:
-		return False
-	for i in range(2, limit+1):
-		if n % i != 0:
-			#print 'fails at %d mod %d' % (n, i)
-			return False
-	return True	
-
-def frequency_count(l):
-	frequencies = {}
-	for i in l:
-		if i not in frequencies:
-			frequencies[i] = 1
-		else:
-			frequencies[i] += 1
-	return frequencies
 
 def flatten_frequencies(frequency_dict):
 	frequency_list = []
@@ -37,23 +19,14 @@ def merge_frequency_counts(frequency_dicts):
 	The final dictionary returned contains the maximum of each entry
 	across the input dictionaries.
 	"""
-	master_frequency_counts = {}
+	master_frequency_counts = defaultdict(list)
 	for fd in frequency_dicts:
-		for key, count in list(fd.items()):
-			if key not in master_frequency_counts:
-				master_frequency_counts[key] = [count]
-			else:
-				master_frequency_counts[key].append(count)
+		for key, count in fd.items():
+			master_frequency_counts[key].append(count)
 	max_frequency_counts = {}
-	for key, fl in list(master_frequency_counts.items()):
+	for key, fl in master_frequency_counts.items():
 		max_frequency_counts[key] = max(fl)
 	return max_frequency_counts
-
-def product(l):
-	product = 1
-	for n in l:
-		product *= n
-	return product
 
 if __name__ == '__main__':
 	main()

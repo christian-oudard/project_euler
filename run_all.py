@@ -3,10 +3,11 @@ import time
 
 def main():
     for problem, solution in problems:
+        print('%s:' % (problem,), end=' ')
         start = time.time()
         output = subprocess.getoutput('python3 %s.py' % problem)
         finish = time.time()
-        print('%s: %s' % (problem, output))
+        print(output)
         if int(output) != solution:
             print('^^^ WRONG')
         print('%.3fs' % (finish - start,))
@@ -23,6 +24,7 @@ problems = (
     ('009', 31875000),
     ('010', 142913828922),
     ('011', 70600674),
+    ('012', 76576500),
 )
 
 if __name__ == '__main__':

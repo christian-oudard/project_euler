@@ -1,6 +1,7 @@
 import math
 import time
 import itertools
+from collections import defaultdict
 
 _n = 2 # the current number being considered as a prime
 _composites = {} # a mapping from composite numbers to the smallest prime that is a factor of it (its witness)
@@ -83,6 +84,12 @@ def all_pairs(iterable):
     for low_index, first_item in enumerated_values:
         for high_index, second_item in enumerated_values[low_index + 1:]:
             yield (first_item, second_item)
+
+def frequency_count(l):
+	frequencies = defaultdict(int)
+	for i in l:
+		frequencies[i] += 1
+	return dict(frequencies)
 
 if __name__ == '__main__':
     import doctest
