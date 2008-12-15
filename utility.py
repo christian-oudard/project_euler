@@ -49,15 +49,15 @@ def prime_factorization(n):
             return factors
 
 def is_prime(n):
-	if n < 2:
-		return False
-	for i in up_to_sqrt_of(n):
-		if n % i == 0:
-			return False
-	return True
+    if n < 2:
+        return False
+    for i in up_to_sqrt_of(n):
+        if n % i == 0:
+            return False
+    return True
 
 def up_to_sqrt_of(n):
-	return range(2, math.ceil(math.sqrt(n)))
+    return range(2, math.ceil(math.sqrt(n)))
 
 def product(iterable):
     prod = 1
@@ -86,10 +86,10 @@ def all_pairs(iterable):
             yield (first_item, second_item)
 
 def frequency_count(l):
-	frequencies = defaultdict(int)
-	for i in l:
-		frequencies[i] += 1
-	return dict(frequencies)
+    frequencies = defaultdict(int)
+    for i in l:
+        frequencies[i] += 1
+    return dict(frequencies)
 
 if __name__ == '__main__':
     import doctest
