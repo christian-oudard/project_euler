@@ -1,6 +1,7 @@
 import math
 import time
 import itertools
+import random
 from collections import defaultdict
 
 _n = 2 # the current number being considered as a prime
@@ -55,6 +56,71 @@ def is_prime(n):
         if n % i == 0:
             return False
     return True
+
+_mrpt_num_trials = 5
+def is_probable_prime(n):
+    """
+    Miller-Rabin primality test.
+    
+    A return value of False means n is certainly not prime. A return value of
+    True means n is very likely a prime.
+    
+    >>> is_probable_prime(2)
+    True
+    >>> is_probable_prime(3)
+    True
+    >>> is_probable_prime(4)
+    False
+    >>> is_probable_prime(5)
+    True
+    >>> is_probable_prime(123456789)
+    False
+    >>> is_probable_prime(6438080068035544392301298549614926991513861075340134\
+3291807343952413826484237063006136971539473913409092293733259038472039\
+7133335969549256322620979036686633213903952966175107096769180017646161\
+851573147596390153)
+    True
+    >>> is_probable_prime(7438080068035544392301298549614926991513861075340134\
+3291807343952413826484237063006136971539473913409092293733259038472039\
+7133335969549256322620979036686633213903952966175107096769180017646161\
+851573147596390153)
+    False
+    """
+
+    # special case 2
+    if n == 2:
+        return True
+    # ensure n is odd
+    if n % 2 == 0:
+        return False
+    # write n-1 as 2**s * d
+    # repeatedly try to divide n-1 by 2
+    s = 0
+    d = n-1
+    while True:
+        quotient, remainder = divmod(d, 2)
+        if remainder == 1:
+            break
+        s += 1
+        d = quotient
+    assert(2**s * d == n-1)
+
+    # test whether a is a witness for the compositeness of n
+    def try_composite(a):
+        if pow(a, d, n) == 1:
+            return False
+        for i in range(s):
+            if pow(a, 2**i * d, n) == n-1:
+                return False
+        return True # n is definitely composite
+
+    for i in _mrpt_num_trials:
+        a = random.randint(2, n-1) 
+        if try_composite(a):
+            return False
+
+    return True # no trial number showed n as composite
+
 
 def up_to_sqrt_of(n):
     return range(2, math.ceil(math.sqrt(n)))
