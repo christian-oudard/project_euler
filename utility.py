@@ -169,6 +169,17 @@ def frequency_count(l):
         frequencies[i] += 1
     return dict(frequencies)
 
+def num_divisors(n):
+    """
+    >>> num_divisors(12)
+    6
+    >>> num_divisors(28)
+    6
+    """
+    pf = prime_factorization(n)
+    fc = frequency_count(pf).values()
+    return product(f + 1 for f in fc)
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
