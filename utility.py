@@ -146,7 +146,6 @@ def gcd(a, b):
     >>> gcd(12, 21)
     3
     """
-    print('.', end='')
     if b == 0:
         return a
     return gcd(b, a % b)
