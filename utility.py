@@ -30,6 +30,8 @@ def prime_factorization(n):
     """
     Return the prime factors of n, as a list, including repeats.
 
+    >>> prime_factorization(1)
+    []
     >>> prime_factorization(2)
     [2]
     >>> prime_factorization(4)
