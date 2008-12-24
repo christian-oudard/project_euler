@@ -145,10 +145,21 @@ def gcd(a, b):
 
     >>> gcd(12, 21)
     3
+    >>> gcd(53473753604, 32407556409)
+    271
     """
-    if b == 0:
-        return a
-    return gcd(b, a % b)
+    while b:
+        a, b = b, a % b
+    return a
+
+def lcm(a, b):
+    """
+    Least common multiple.
+
+    >>> lcm(21, 6)
+    42
+    """
+    return a * b // gcd(a, b)
 
 def up_to(n, iterable):
     return list(itertools.takewhile(lambda i: i <= n, iterable))
