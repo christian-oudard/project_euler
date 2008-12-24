@@ -29,6 +29,13 @@ def primes():
 def prime_factorization(n):
     """
     Return the prime factors of n, as a list, including repeats.
+
+    >>> prime_factorization(2)
+    [2]
+    >>> prime_factorization(4)
+    [2, 2]
+    >>> prime_factorization(8)
+    [2, 2, 2]
     >>> prime_factorization(12)
     [2, 2, 3]
     >>> prime_factorization(600851475143)
@@ -43,7 +50,8 @@ def prime_factorization(n):
                 n = quotient
                 break
         else:
-            factors.append(n)
+            if n != 1:
+                factors.append(n)
             return factors
 
 def is_prime(n):
