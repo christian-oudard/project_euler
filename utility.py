@@ -26,9 +26,6 @@ def primes():
             _composites[next] = witness
         _n += 1
 
-def up_to(n, iterable):
-    return list(itertools.takewhile(lambda i: i <= n, iterable))
-
 def prime_factorization(n):
     """
     Return the prime factors of n, as a list, including repeats.
@@ -121,6 +118,8 @@ def is_probable_prime(n):
 
     return True # no trial number showed n as composite
 
+def up_to(n, iterable):
+    return list(itertools.takewhile(lambda i: i <= n, iterable))
 
 def up_to_sqrt_of(n):
     return range(2, math.ceil(math.sqrt(n)))
@@ -130,16 +129,6 @@ def product(iterable):
     for n in iterable:
         prod *= n
     return prod
-
-# not yet used
-#def perfect_squares_up_to(n):
-#    perfect_squares = set()
-#    i = s = 1
-#    while s <= n:
-#        perfect_squares.add(s)
-#        i += 1
-#        s = i**2
-#    return perfect_squares
 
 def nth(iterable, n):
     """Get the Nth item in the iterable."""
