@@ -111,7 +111,7 @@ def is_probable_prime(n):
                 return False
         return True # n is definitely composite
 
-    for i in _mrpt_num_trials:
+    for i in range(_mrpt_num_trials):
         a = random.randint(2, n-1) 
         if try_composite(a):
             return False
