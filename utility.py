@@ -2,6 +2,7 @@ import math
 import time
 import itertools
 import random
+from copy import copy
 from collections import defaultdict
 
 _n = 2 # the current number being considered as a prime
@@ -184,6 +185,10 @@ def all_pairs(iterable):
             yield (first_item, second_item)
 
 def frequency_count(l):
+    """
+    >>> frequency_count('aaabbc') == {'a': 3, 'b': 2, 'c': 1}
+    True
+    """
     frequencies = defaultdict(int)
     for i in l:
         frequencies[i] += 1
@@ -199,6 +204,30 @@ def num_divisors(n):
     pf = prime_factorization(n)
     fc = frequency_count(pf).values()
     return product(f + 1 for f in fc)
+
+def proper_divisors(n):
+    """
+    >>> proper_divisors(12)
+    [1, 2, 3, 4, 6]
+    >>> proper_divisors(28)
+    [1, 2, 4, 7, 14]
+    """
+    divisors = {1}
+    for i in up_to_sqrt_of(n):
+        if n % i == 0:
+            divisors.add(i)
+            divisors.add(n//i)
+    return sorted(list(divisors))
+
+def all_combinations(sequence):
+    """
+    >>> list(all_combinations('ab'))
+    [(), ('a',), ('b',), ('a', 'b')]
+    """
+    sequence = list(sequence)
+    # use the bits of seq_no to select items from sequence
+    for seq_no in range(2**len(sequence)):
+        yield tuple(value for (index, value) in enumerate(sequence) if 0x1 << index & seq_no)
 
 if __name__ == '__main__':
     import doctest
