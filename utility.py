@@ -164,6 +164,15 @@ def lcm(a, b):
     """
     return a * b // gcd(a, b)
 
+def coprime(a, b):
+    """
+    >>> coprime(6, 35)
+    True
+    >>> coprime(6, 27)
+    False
+    """
+    return gcd(a, b) == 1
+
 def up_to(n, iterable):
     return list(itertools.takewhile(lambda i: i <= n, iterable))
 
