@@ -166,7 +166,11 @@ def up_to(n, iterable):
     return list(itertools.takewhile(lambda i: i <= n, iterable))
 
 def up_to_sqrt_of(n):
-    return range(2, math.ceil(math.sqrt(n)))
+    """
+    >>> max(up_to_sqrt_of(196))
+    14
+    """
+    return range(2, math.floor(math.sqrt(n)) + 1)
 
 def product(iterable):
     prod = 1
@@ -211,7 +215,15 @@ def proper_divisors(n):
     [1, 2, 3, 4, 6]
     >>> proper_divisors(28)
     [1, 2, 4, 7, 14]
+    >>> proper_divisors(0)
+    []
+    >>> proper_divisors(1)
+    []
+    >>> proper_divisors(196)
+    [1, 2, 4, 7, 14, 28, 49, 98]
     """
+    if n < 2:
+        return []
     divisors = {1}
     for i in up_to_sqrt_of(n):
         if n % i == 0:
