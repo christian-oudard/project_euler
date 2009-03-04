@@ -1,1 +1,4 @@
-utility.py
+#! /bin/sh
+
+python3 utility.py
+python3 tests.py

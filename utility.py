@@ -1,33 +1,53 @@
 #! /usr/bin/python3
 
 import math
-import time
 import itertools
 import random
 from copy import copy
 from collections import defaultdict
 
-_n = 2 # the current number being considered as a prime
-_composites = {} # a mapping from composite numbers to the smallest prime that is a factor of it (its witness)
-_primes = [] # primes found so far
 def primes():
-    global _n, _composites, _primes
-    for p in _primes:
-        yield p
-    while True:
-        if _n not in _composites:
+    """
+    >>> list(up_to(100, primes()))
+    [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+    """
+    for n in itertools.count():
+        yield prime_number(n)
+
+def prime_number(n):
+    """
+    Calculate the nth prime (0-based index).
+
+    >>> prime_number(1000 - 1)
+    7919
+    """
+    for i in range(n - len(_primes) + 1):
+        _gen_prime()
+    return _primes[n]
+
+_p_calcs = 0
+_primes = [2]
+_composites = {4: 2}
+try:
+    from primes_precalc import _primes, _composites
+except ImportError:
+    pass
+def _gen_prime():
+    global _p_calcs
+    for n in itertools.count(_primes[-1] + 1):
+        if n not in _composites:
             # not a composite, therefore prime
-            _primes.append(_n)
-            yield _n
-            _composites[_n**2] = _n # the next unseen composite number here will be n squared
+            _primes.append(n)
+            _composites[n**2] = n # the next unseen composite number here will be n squared
+            _p_calcs += 1
+            return
         else: # n is a composite number
             # find the next unseen composite number with the same witness as n
-            witness = _composites.pop(_n)
-            next = _n + witness
+            witness = _composites.pop(n)
+            next = n + witness
             while next in _composites:
                 next += witness
             _composites[next] = witness
-        _n += 1
 
 def prime_factorization(n):
     """
@@ -254,4 +274,9 @@ def all_combinations(sequence):
 
 if __name__ == '__main__':
     import doctest
+    import time
+    start = time.time()
     doctest.testmod()
+    end = time.time()
+    print('%.3fs' % (end - start))
+
