@@ -80,6 +80,12 @@ def prime_factorization(n):
             return factors
 
 def is_prime(n):
+    # Check prime cache.
+    if n <= _primes[-1]:
+        return n in _primes
+    return _is_prime(n)
+
+def _is_prime(n):
     if n < 2:
         return False
     for i in up_to_sqrt_of(n):
@@ -195,7 +201,8 @@ def coprime(a, b):
     return gcd(a, b) == 1
 
 def up_to(n, iterable):
-    return list(itertools.takewhile(lambda i: i <= n, iterable))
+    """Yield values from the iterable up to and including n."""
+    return itertools.takewhile(lambda i: i <= n, iterable)
 
 def up_to_sqrt_of(n):
     """

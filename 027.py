@@ -1,5 +1,5 @@
 import itertools
-from utility import is_prime
+from utility import is_prime, up_to, primes
 
 def eval_polynomial(coefficients, x):
     """Evaluates a polynomial at the given point.
@@ -29,11 +29,10 @@ def prime_sequence_length(coefficients):
             return n
 
 MAX_NUM = 1000 - 1
-domain = range(-MAX_NUM, MAX_NUM + 1)
 max_poly = None
 max_length = 0
-for a in domain:
-    for b in domain:
+for a in range(-MAX_NUM, MAX_NUM + 1):
+    for b in up_to(MAX_NUM, primes()):
         poly = (1, a, b)
         l = prime_sequence_length(poly)
         if l > max_length:
