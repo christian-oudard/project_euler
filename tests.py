@@ -7,7 +7,11 @@ import utility
 
 class PrimesTestCase(unittest.TestCase):
     def setUp(self):
+        import utility
         reload(utility)
+        # Reset the primes cache.
+        utility._primes = [2]
+        utility._composites = {4: 2}
 
     def testCacheInit(self):
         self.assertEqual(len(utility._primes), 1)
