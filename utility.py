@@ -270,15 +270,45 @@ def proper_divisors(n):
             divisors.add(n//i)
     return sorted(list(divisors))
 
-def all_combinations(sequence):
+def pairwise(iterable):
+    """s -> (s0,s1), (s1,s2), (s2, s3), ...
+
+    >>> list(pairwise([1, 2, 3, 4]))
+    [(1, 2), (2, 3), (3, 4)]
     """
-    >>> list(all_combinations('ab'))
-    [(), ('a',), ('b',), ('a', 'b')]
+    a, b = itertools.tee(iterable)
+    next(b, None)
+    return zip(a, b)
+
+def npr(n, r):
     """
-    sequence = list(sequence)
-    # use the bits of seq_no to select items from sequence
-    for seq_no in range(2**len(sequence)):
-        yield tuple(value for (index, value) in enumerate(sequence) if 0x1 << index & seq_no)
+    Calculate the number of ordered permutations of r items taken from a
+    population of size n.
+
+    >>> npr(3, 2)
+    6
+    >>> npr(100, 20)
+    1303995018204712451095685346159820800000
+    >>> npr(50000, 5000) % 123456789123456789
+    95689049376143223
+    """
+    assert 0 <= r <= n
+    return product(range(n - r + 1, n + 1))
+
+def ncr(n, r):
+    """
+    Calculate the number of unordered combinations of r items taken from a
+    population of size n.
+
+    >>> ncr(3, 2)
+    3
+    >>> ncr(100, 20)
+    535983370403809682970
+    >>> ncr(50000, 5000) % 123456789123456789
+    8758576905993486
+    """
+    assert 0 <= r <= n
+    return npr(n, r) // math.factorial(r)
 
 if __name__ == '__main__':
     import doctest
