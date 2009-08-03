@@ -280,6 +280,19 @@ def pairwise(iterable):
     next(b, None)
     return zip(a, b)
 
+def tuplewise(n, iterable):
+    """
+    >>> list(tuplewise(2, [1, 2, 3, 4]))
+    [(1, 2), (2, 3), (3, 4)]
+    >>> list(tuplewise(3, [1, 2, 3, 4]))
+    [(1, 2, 3), (2, 3, 4)]
+    """
+    iters = itertools.tee(iterable, n)
+    for repeat, iter in enumerate(iters):
+        for i in range(repeat):
+            next(iter)
+    return zip(*iters)
+
 def npr(n, r):
     """
     Calculate the number of ordered permutations of r items taken from a
