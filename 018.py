@@ -1,4 +1,4 @@
-from decorators import memoize
+from utility import memoize
 
 triangle = """
 75
