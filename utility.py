@@ -3,8 +3,24 @@
 import math
 import itertools
 import random
+import functools
 from copy import copy
 from collections import defaultdict
+
+def memoize(func):
+    func._cache = {}
+    def memoize(*args, **kwargs):
+        if kwargs: # frozenset is used to ensure hashability
+            key = args, frozenset(kwargs.items())
+        else:
+            key = args
+        cache = func._cache
+        if key in cache:
+            return cache[key]
+        else:
+            cache[key] = result = func(*args, **kwargs)
+            return result
+    return functools.update_wrapper(memoize, func)
 
 def primes():
     """
@@ -49,6 +65,7 @@ def _gen_prime():
                 next += witness
             _composites[next] = witness
 
+@memoize
 def prime_factorization(n):
     """
     Return the prime factors of n, as a list, including repeats.
@@ -66,18 +83,14 @@ def prime_factorization(n):
     >>> prime_factorization(600851475143)
     [71, 839, 1471, 6857]
     """
-    factors = []
-    while True:
-        for p in up_to(math.ceil(math.sqrt(n)), primes()):
-            quotient, remainder = divmod(n, p)
-            if remainder == 0:
-                factors.append(p)
-                n = quotient
-                break
-        else:
-            if n != 1:
-                factors.append(n)
-            return factors
+    assert n > 0
+    if n == 1:
+        return []
+    for p in up_to(math.ceil(math.sqrt(n)), primes()):
+        quotient, remainder = divmod(n, p)
+        if remainder == 0:
+            return [p] + prime_factorization(quotient)
+    return [n]
 
 def is_prime(n):
     # Check prime cache.
@@ -97,10 +110,10 @@ _mrpt_num_trials = 5
 def is_probable_prime(n):
     """
     Miller-Rabin primality test.
-    
+
     A return value of False means n is certainly not prime. A return value of
     True means n is very likely a prime.
-    
+
     >>> is_probable_prime(1)
     Traceback (most recent call last):
         ...
@@ -155,7 +168,7 @@ def is_probable_prime(n):
         return True # n is definitely composite
 
     for i in range(_mrpt_num_trials):
-        a = random.randint(2, n-1) 
+        a = random.randint(2, n-1)
         if try_composite(a):
             return False
 
