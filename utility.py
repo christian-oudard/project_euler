@@ -101,6 +101,10 @@ def is_probable_prime(n):
     A return value of False means n is certainly not prime. A return value of
     True means n is very likely a prime.
     
+    >>> is_probable_prime(1)
+    Traceback (most recent call last):
+        ...
+    AssertionError
     >>> is_probable_prime(2)
     True
     >>> is_probable_prime(3)
@@ -122,6 +126,7 @@ def is_probable_prime(n):
 851573147596390153)
     False
     """
+    assert n >= 2
     # special case 2
     if n == 2:
         return True
