@@ -341,6 +341,19 @@ def ncr(n, r):
     assert 0 <= r <= n
     return npr(n, r) // math.factorial(r)
 
+def digits_of(n):
+    """
+    Split the number into its digits.
+
+    >>> digits_of(123)
+    [1, 2, 3]
+    """
+    digits = []
+    while n > 0:
+        n, d = divmod(n, 10)
+        digits.insert(0, d)
+    return digits
+
 if __name__ == '__main__':
     import doctest
     import time
