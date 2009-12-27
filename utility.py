@@ -106,7 +106,7 @@ def _is_prime(n):
             return False
     return True
 
-_mrpt_num_trials = 5
+_mrpt_num_trials = 5 # number of bases to test
 def is_probable_prime(n):
     """
     Miller-Rabin primality test.
@@ -128,11 +128,19 @@ def is_probable_prime(n):
     True
     >>> is_probable_prime(123456789)
     False
+
+    >>> primes_under_1000 = [i for i in range(2, 1000) if is_probable_prime(i)]
+    >>> len(primes_under_1000)
+    168
+    >>> primes_under_1000[-10:]
+    [937, 941, 947, 953, 967, 971, 977, 983, 991, 997]
+
     >>> is_probable_prime(6438080068035544392301298549614926991513861075340134\
 3291807343952413826484237063006136971539473913409092293733259038472039\
 7133335969549256322620979036686633213903952966175107096769180017646161\
 851573147596390153)
     True
+
     >>> is_probable_prime(7438080068035544392301298549614926991513861075340134\
 3291807343952413826484237063006136971539473913409092293733259038472039\
 7133335969549256322620979036686633213903952966175107096769180017646161\
@@ -158,7 +166,7 @@ def is_probable_prime(n):
         d = quotient
     assert(2**s * d == n-1)
 
-    # test whether a is a witness for the compositeness of n
+    # test the base a to see whether it is a witness for the compositeness of n
     def try_composite(a):
         if pow(a, d, n) == 1:
             return False
@@ -171,8 +179,7 @@ def is_probable_prime(n):
         a = random.randint(2, n-1)
         if try_composite(a):
             return False
-
-    return True # no trial number showed n as composite
+    return True # no base tested showed n as composite
 
 def totient(n):
     """
