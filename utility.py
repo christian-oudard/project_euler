@@ -1,10 +1,9 @@
 #! /usr/bin/python3
 
-import math
 import itertools
 import random
 import functools
-from copy import copy
+from math import factorial
 from collections import defaultdict
 
 def memoize(func):
@@ -21,6 +20,35 @@ def memoize(func):
             cache[key] = result = func(*args, **kwargs)
             return result
     return functools.update_wrapper(memoize, func)
+
+# from http://www.codecodex.com/wiki/Calculate_an_integer_square_root
+def isqrt(n):
+    """
+    Integer floor square root. Handles large numbers.
+
+    >>> import math
+    >>> [isqrt(n) for n in range(1000)] == [math.floor(math.sqrt(n)) for n in range(1000)]
+    True
+    >>> isqrt(2**2000) == 2**1000
+    True
+
+    >>> n = 188198812920607963838697239461650439807163563379417382700763356422988859715234665485319060606504743045317388011303396716199692321205734031879550656996221305168759307650257059
+    >>> r = isqrt(n)
+    >>> r
+    433818871097844202389623285336968290605469456301558930293445695571862781832679867424802
+    >>> r**2 <= n
+    True
+    >>> (r + 1)**2 > n
+    True
+    """
+    guess = (n >> n.bit_length() // 2) + 1
+    result = (guess + n // guess) // 2
+    while abs(result - guess) > 1:
+        guess = result
+        result = (guess + n // guess) // 2
+    while result * result > n:
+        result -= 1
+    return result
 
 def primes():
     """
@@ -58,29 +86,44 @@ def primes_up_to(limit):
 @memoize
 def prime_factorization(n):
     """
-    Return the prime factors of n, as a list, including repeats.
+    Return the prime factors of n, as a tuple, including repeats.
 
     >>> prime_factorization(1)
-    []
+    ()
     >>> prime_factorization(2)
-    [2]
+    (2,)
     >>> prime_factorization(4)
-    [2, 2]
+    (2, 2)
     >>> prime_factorization(8)
-    [2, 2, 2]
+    (2, 2, 2)
     >>> prime_factorization(12)
-    [2, 2, 3]
+    (2, 2, 3)
     >>> prime_factorization(600851475143)
-    [71, 839, 1471, 6857]
+    (71, 839, 1471, 6857)
+
+    >>> pf = prime_factorization(2**2000)
+    >>> len(pf)
+    2000
+    >>> all(f == 2 for f in pf)
+    True
     """
     assert n > 0
+
     if n == 1:
-        return []
-    for p in up_to(math.ceil(math.sqrt(n)), primes()):
-        quotient, remainder = divmod(n, p)
-        if remainder == 0:
-            return [p] + prime_factorization(quotient)
-    return [n]
+        return ()
+
+    factors = []
+    while True:
+        for p in up_to(isqrt(n), primes()):
+            quotient, remainder = divmod(n, p)
+            if remainder == 0:
+                factors.append(p)
+                n = quotient
+                break # Continue while loop.
+        else:
+            factors.append(n)
+            factors = tuple(factors)
+            return factors
 
 def is_prime(n):
     if n < 2:
@@ -215,7 +258,7 @@ def up_to_sqrt_of(n):
     >>> max(up_to_sqrt_of(196))
     14
     """
-    return range(2, math.floor(math.sqrt(n)) + 1)
+    return range(2, isqrt(n) + 1)
 
 def product(iterable):
     prod = 1
@@ -327,7 +370,7 @@ def ncr(n, r):
     8758576905993486
     """
     assert 0 <= r <= n
-    return npr(n, r) // math.factorial(r)
+    return npr(n, r) // factorial(r)
 
 def digits_of(n):
     """
