@@ -27,6 +27,22 @@ def primes():
     >>> list(up_to(100, primes()))
     [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     """
+    composites = {} # A mapping from composite numbers to the smallest prime
+                    # that is a factor of it (its witness).
+    n = 2 # The current number being considered as a prime.
+    while True:
+        if n not in composites:
+            yield n # Not a composite, therefore prime.
+            composites[n**2] = n # The next unseen composite number is n squared.
+        else:
+            # n is composite. Find the next unseen composite number with the
+            # same witness as n.
+            witness = composites.pop(n)
+            next = n + witness
+            while next in composites:
+                next += witness
+            composites[next] = witness
+        n += 1
     for n in itertools.count():
         yield prime_number(n)
 
@@ -38,41 +54,6 @@ def primes_up_to(limit):
     78498
     """
     return list(up_to(limit, primes()))
-
-def prime_number(n):
-    """
-    Calculate the nth prime (0-based index).
-
-    >>> prime_number(1000 - 1)
-    7919
-    """
-    for i in range(n - len(_primes) + 1):
-        _gen_prime()
-    return _primes[n]
-
-_p_calcs = 0
-_primes = [2]
-_composites = {4: 2}
-try:
-    from primes_precalc import _primes, _composites
-except ImportError:
-    pass
-def _gen_prime():
-    global _p_calcs
-    for n in itertools.count(_primes[-1] + 1):
-        if n not in _composites:
-            # not a composite, therefore prime
-            _primes.append(n)
-            _composites[n**2] = n # the next unseen composite number here will be n squared
-            _p_calcs += 1
-            return
-        else: # n is a composite number
-            # find the next unseen composite number with the same witness as n
-            witness = _composites.pop(n)
-            next = n + witness
-            while next in _composites:
-                next += witness
-            _composites[next] = witness
 
 @memoize
 def prime_factorization(n):
@@ -102,12 +83,6 @@ def prime_factorization(n):
     return [n]
 
 def is_prime(n):
-    # Check prime cache.
-    if n <= _primes[-1]:
-        return n in _primes
-    return _is_prime(n)
-
-def _is_prime(n):
     if n < 2:
         return False
     for i in up_to_sqrt_of(n):
@@ -124,9 +99,7 @@ def is_probable_prime(n):
     True means n is very likely a prime.
 
     >>> is_probable_prime(1)
-    Traceback (most recent call last):
-        ...
-    AssertionError
+    False
     >>> is_probable_prime(2)
     True
     >>> is_probable_prime(3)
@@ -156,11 +129,10 @@ def is_probable_prime(n):
 851573147596390153)
     False
     """
-    assert n >= 2
-    # special case 2
+    if n < 2:
+        return False
     if n == 2:
         return True
-    # ensure n is odd
     if n % 2 == 0:
         return False
     # write n-1 as 2**s * d
