@@ -1,6 +1,6 @@
 import math
 from itertools import islice
-from utility import is_probable_prime, primes, up_to
+from utility import is_probable_prime, primes
 
 def prime_sqrt(n):
     """
@@ -41,9 +41,9 @@ def semidivisible_numbers(limit):
     >>> len(_)
     92
     """
-    for lps, ups in zip(primes(), islice(primes(), 1, None)): 
+    for lps, ups in zip(primes(), islice(primes(), 1, None)):
         lo = lps**2
-        hi = ups**2 
+        hi = ups**2
 
         hi_candidates = set()
         lo_candidates = set()

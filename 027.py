@@ -1,5 +1,5 @@
 import itertools
-from utility import is_prime, up_to, primes
+from utility import is_prime, primes_up_to
 
 def eval_polynomial(coefficients, x):
     """Evaluates a polynomial at the given point.
@@ -32,7 +32,7 @@ MAX_NUM = 1000 - 1
 max_poly = None
 max_length = 0
 for a in range(-MAX_NUM, MAX_NUM + 1):
-    for b in up_to(MAX_NUM, primes()):
+    for b in primes_up_to(MAX_NUM):
         poly = (1, a, b)
         l = prime_sequence_length(poly)
         if l > max_length:

@@ -1,3 +1,3 @@
-from utility import primes, up_to
+from utility import primes_up_to
 
-print(sum(up_to(2000000, primes())))
+print(sum(primes_up_to(2000000)))

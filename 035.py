@@ -1,4 +1,4 @@
-from utility import primes, up_to
+from utility import primes_up_to
 
 def rot_left(s):
     """
@@ -22,7 +22,7 @@ def rotations(n):
         s = rot_left(s)
 
 def circular_primes(limit):
-    prime_set = set(up_to(limit, primes()))
+    prime_set = set(primes_up_to(limit))
     for p in prime_set:
         if all((r in prime_set) for r in rotations(p)):
             yield p
