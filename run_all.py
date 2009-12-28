@@ -4,6 +4,7 @@ import subprocess
 import time
 
 def main():
+    total_time = 0.0
     for problem, solution in problems:
         print('%s:' % (problem,), end=' ')
         start = time.time()
@@ -12,7 +13,10 @@ def main():
         print(output)
         if int(output) != solution:
             print('^^^ WRONG')
-        print('%.3fs' % (finish - start,))
+        run_time = finish - start
+        total_time += run_time
+        print('{:.3f}s'.format(run_time))
+    print('Total Time: {:.3f}s'.format(total_time))
 
 problems = (
     ('001', 233168),
