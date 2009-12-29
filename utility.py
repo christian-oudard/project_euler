@@ -6,6 +6,8 @@ import functools
 from math import factorial
 from collections import defaultdict
 
+import vec
+
 def memoize(func):
     func._cache = {}
     def memoize(*args, **kwargs):
@@ -384,6 +386,80 @@ def digits_of(n):
         n, d = divmod(n, 10)
         digits.insert(0, d)
     return digits
+
+def cmp(a, b):
+    if a == b:
+        return 0
+    if a < b:
+        return -1
+    if a > b:
+        return 1
+
+def cmp_line(l1, l2, p):
+    """
+    Determine where the point p lies with relation to the line l1-l2.
+    Return -1 if s is below, +1 if it is above, and 0 if it is on the line.
+
+    >>> cmp_line((-1,-1), (1,1), (1,0))
+    -1
+    >>> cmp_line((-1,-1), (1,1), (0,1))
+    1
+    >>> cmp_line((-1,-1), (1,1), (0,0))
+    0
+
+    It also works with vertical lines.
+    >>> cmp_line((0,-1), (0,1), (1, 0))
+    -1
+    >>> cmp_line((0,-1), (0,1), (-1, 0))
+    1
+    >>> cmp_line((0,-1), (0,1), (0, 0))
+    0
+    """
+    x1, y1 = l1
+    x2, y2 = l2
+    x, y = p
+    dy = y2 - y1
+    dx = x2 - x1
+    return cmp(y * dx, dy * (x - x1) + y1 * dx)
+
+def partition(points, l1, l2, s=None):
+    """
+    Partition a set of points by a line.
+
+    The line is defined by l1, l2. The desired side of the line is given by the point s.
+
+    >>> partition([(-1,0), (0,0), (1,0)], (0,1), (0,-1), (2,0))[0]
+    {(1, 0)}
+    >>> partition([(-1,0), (0,0), (1,0)], (0,1), (0,-1), (-2,0))[0]
+    {(-1, 0)}
+    >>> partition([(-2,2), (-1,0), (0,0), (1,0)], (-1,0), (0,1), (3,0))[0] == {(0, 0), (1, 0)}
+    True
+    >>> partition([(-2,2), (-1,0), (0,0), (1,0)], (-1,0), (0,1), (-3,0))[0] == {(-2, 2)}
+    True
+
+    You can omit the argument "s" if you don't care.
+    >>> partition([(-1,0), (0,0), (1,0)], (0,1), (0,-1))
+    ({(-1, 0)}, {(1, 0)})
+    """
+    if s is None:
+        s = vec.add(l1, vec.perp(vec.vfrom(l1, l2)))
+
+    if l1 == l2:
+        raise ValueError('l1 equals l2')
+    sign = cmp_line(l1, l2, s)
+    if sign == 0:
+        raise ValueError('s is on the line l1 l2')
+
+    forward = set()
+    reverse = set()
+    for p in points:
+        c = cmp_line(l1, l2, p)
+        if c == sign:
+            forward.add(p)
+        elif c == -sign:
+            reverse.add(p)
+    return forward, reverse
+
 
 if __name__ == '__main__':
     import doctest
