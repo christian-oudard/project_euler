@@ -83,6 +83,26 @@ def is_perfect_square(n):
     # No quick tests showed n as non-square, just check the square root.
     return isqrt(n) ** 2 == n
 
+def figurate_numbers(size):
+    """
+    >>> list(up_to(100, figurate_numbers(3))) # triangular numbers
+    [1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91]
+    >>> list(up_to(100, figurate_numbers(4))) # square numbers
+    [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+    >>> list(up_to(100, figurate_numbers(5))) # pentagonal numbers
+    [1, 5, 12, 22, 35, 51, 70, 92]
+    >>> list(up_to(100, figurate_numbers(6))) # hexagonal numbers
+    [1, 6, 15, 28, 45, 66, 91]
+    """
+    assert size >= 3
+    step = size - 2
+    n = 1
+    d = n + step
+    while True:
+        yield n
+        n += d
+        d += step
+
 def primes():
     """
     >>> list(up_to(100, primes()))

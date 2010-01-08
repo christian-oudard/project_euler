@@ -1,4 +1,4 @@
-from utility import up_to
+from utility import up_to, figurate_numbers
 
 def letter_value(c):
     """
@@ -15,23 +15,11 @@ def word_value(word):
     """
     return sum(letter_value(c) for c in word)
 
-def triangle_numbers():
-    """
-    >>> list(up_to(100, triangle_numbers()))
-    [1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91]
-    """
-    n = 0
-    d = 1
-    while True:
-        n += d
-        d += 1
-        yield n
-
 with open('data/words.txt') as f:
     word_data = f.read()
 
 words = [w.strip('"').lower() for w in word_data.split(',')]
 
-t_nums = set(up_to(30 * 26, triangle_numbers()))
+t_nums = set(up_to(30 * 26, figurate_numbers(3)))
 print(sum(1 for w in words if word_value(w) in t_nums))
 
