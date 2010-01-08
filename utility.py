@@ -396,7 +396,8 @@ def digits_of(n):
     digits = []
     while n > 0:
         n, d = divmod(n, 10)
-        digits.insert(0, d)
+        digits.append(d)
+    digits.reverse()
     return digits
 
 def cmp(a, b):
