@@ -437,6 +437,17 @@ def digits_of(n, base=10):
     digits.reverse()
     return digits
 
+def digital_root(n, base=10):
+    """
+    Repeatedly sum the digits of N until there is a single digit left.
+    """
+    # Using the congruence method, see:
+    # http://en.wikipedia.org/wiki/Digital_root
+    result = n % (base - 1)
+    if result == 0:
+        return base - 1
+    return result
+
 def cmp(a, b):
     if a == b:
         return 0
