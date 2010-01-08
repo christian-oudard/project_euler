@@ -52,6 +52,37 @@ def isqrt(n):
         result -= 1
     return result
 
+def is_perfect_square(n):
+    """
+    Test to see if n is a perfect square.
+
+    >>> is_perfect_square(-1)
+    False
+    >>> is_perfect_square(0)
+    True
+    >>> is_perfect_square(3)
+    False
+    >>> is_perfect_square(4)
+    True
+
+    >>> limit = 10000
+    >>> squares = set(n**2 for n in range(isqrt(limit) + 1))
+    >>> all(is_perfect_square(n) for n in squares)
+    True
+    >>> non_squares = set(range(limit)) - squares
+    >>> any(is_perfect_square(n) for n in non_squares)
+    False
+    """
+    if n < 0:
+        return False
+    if n == 0:
+        return True
+    # Perfect squares in hexadecimal can only end in 0, 1, 4, or 9.
+    if (n & 0xf) not in (0, 1, 4, 9):
+        return False
+    # No quick tests showed n as non-square, just check the square root.
+    return isqrt(n) ** 2 == n
+
 def primes():
     """
     >>> list(up_to(100, primes()))
