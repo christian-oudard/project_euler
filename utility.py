@@ -269,7 +269,19 @@ def product(iterable):
     return prod
 
 def nth(iterable, n):
-    """Get the Nth item in the iterable."""
+    """
+    Get the Nth item in the iterable, 0-based.
+
+    >>> s = 'abcd'
+    >>> nth(s, 0)
+    'a'
+    >>> nth(s, 3)
+    'd'
+    >>> nth(s, 4)
+    Traceback (most recent call last):
+        ...
+    IndexError: list index out of range
+    """
     return list(itertools.islice(iterable, n, n+1))[0]
 
 def all_pairs(iterable):
