@@ -52,6 +52,21 @@ def isqrt(n):
         result -= 1
     return result
 
+def ilog(n, base):
+    """
+    Find the integer log of n with respect to the base.
+
+    >>> import math
+    >>> for base in range(2, 16 + 1):
+    ...     for n in range(1, 1000):
+    ...         assert ilog(n, base) == int(math.log(n, base) + 1e-10), '%s %s' % (n, base)
+    """
+    count = 0
+    while n >= base:
+        count += 1
+        n //= base
+    return count
+
 def is_perfect_square(n):
     """
     Test to see if n is a perfect square.
