@@ -421,11 +421,15 @@ def digits_of(n, base=10):
     """
     Split the number into its digits.
 
+    >>> digits_of(0)
+    [0]
     >>> digits_of(123)
     [1, 2, 3]
     >>> digits_of(0xabc, base=16)
     [10, 11, 12]
     """
+    if n == 0:
+        return [0]
     digits = []
     while n > 0:
         n, d = divmod(n, base)
