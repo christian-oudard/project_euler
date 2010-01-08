@@ -23,7 +23,7 @@ def memoize(func):
             return result
     return functools.update_wrapper(memoize, func)
 
-# from http://www.codecodex.com/wiki/Calculate_an_integer_square_root
+# adapted from http://www.codecodex.com/wiki/Calculate_an_integer_square_root
 def isqrt(n):
     """
     Integer floor square root. Handles large numbers.
