@@ -27,4 +27,4 @@ def circular_primes(limit):
         if all((r in prime_set) for r in rotations(p)):
             yield p
 
-print(len(list(circular_primes(1000000))))
+print(sum(1 for _ in circular_primes(1000000)))
