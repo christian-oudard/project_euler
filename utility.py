@@ -457,6 +457,24 @@ def digits_of(n, base=10):
     digits.reverse()
     return digits
 
+def from_digits(digits, base=10):
+    """
+    Reconstruct an integer from its digits.
+
+    >>> from_digits([1, 2, 3])
+    123
+    >>> from_digits([10, 11, 12], base=16) == 0xabc
+    True
+    >>> all(n == from_digits(digits_of(n)) for n in range(10000))
+    True
+    """
+    result = 0
+    power = 1
+    for digit in reversed(digits):
+        result += power * digit
+        power *= base
+    return result
+
 def digital_root(n, base=10):
     """
     Repeatedly sum the digits of N until there is a single digit left.
