@@ -124,13 +124,13 @@ def primes():
     [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     """
     for n in itertools.count():
-        yield prime_number(n)
+        yield _prime_number(n)
 
-def prime_number(n):
+def _prime_number(n):
     """
     Calculate the nth prime (0-based index).
 
-    >>> prime_number(1000 - 1)
+    >>> _prime_number(1000 - 1)
     7919
     """
     while len(_primes) <= n:
@@ -154,15 +154,6 @@ def _gen_prime():
             while next in _composites:
                 next += witness
             _composites[next] = witness
-
-def primes_up_to(limit):
-    """
-    >>> primes_up_to(100)
-    [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
-    >>> len(primes_up_to(100000))
-    9592
-    """
-    return list(up_to(limit, primes()))
 
 def prime_factorization(n):
     """
@@ -346,16 +337,16 @@ def product(iterable):
         prod *= n
     return prod
 
-def nth(iterable, n):
+def nth(n, iterable):
     """
     Get the Nth item in the iterable, 0-based.
 
     >>> s = 'abcd'
-    >>> nth(s, 0)
+    >>> nth(0, s)
     'a'
-    >>> nth(s, 3)
+    >>> nth(3, s)
     'd'
-    >>> nth(s, 4)
+    >>> nth(4, s)
     Traceback (most recent call last):
         ...
     IndexError: list index out of range

@@ -1,6 +1,5 @@
 from copy import copy
 from math import factorial
-from utility import nth
 
 def permutation_ids(length):
     """

@@ -4,7 +4,7 @@ from utility import digits_of, product
 def iter_counting_digits():
     """
     >>> from utility import nth
-    >>> nth(iter_counting_digits(), 12 - 1)
+    >>> nth(12 - 1, iter_counting_digits())
     1
     >>> ''.join(str(d) for d in itertools.islice(iter_counting_digits(), 33))
     '123456789101112131415161718192021'
