@@ -1,3 +1,3 @@
-from utility import primes, nth
+from utility import prime_number
 
-print(nth(primes(), 10000))
+print(prime_number(10001 - 1))

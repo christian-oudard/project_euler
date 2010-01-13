@@ -119,24 +119,41 @@ def figurate_numbers(size):
         d += step
 
 def primes():
-    composites = {} # A mapping from composite numbers to the smallest prime
-                    # that is a factor of it (its witness).
-    n = 2 # The current number being considered as a prime.
-    while True:
-        if n not in composites:
-            yield n # Not a composite, therefore prime.
-            composites[n**2] = n # The next unseen composite number is n squared.
+    """
+    >>> list(up_to(100, primes()))
+    [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+    """
+    for n in itertools.count():
+        yield prime_number(n)
+
+def prime_number(n):
+    """
+    Calculate the nth prime (0-based index).
+
+    >>> prime_number(1000 - 1)
+    7919
+    """
+    while len(_primes) <= n:
+        _gen_prime()
+    return _primes[n]
+
+_primes = [2] # Primes found so far.
+_composites = {4: 2} # A mapping from composite numbers to the smallest prime
+                     # that is a factor of it (its witness).
+def _gen_prime():
+    for n in itertools.count(_primes[-1] + 1):
+        if n not in _composites:
+            _primes.append(n) # Not a composite, therefore prime
+            _composites[n**2] = n # The next unseen composite number is n squared.
+            return
         else:
             # n is composite. Find the next unseen composite number with the
             # same witness as n.
-            witness = composites.pop(n)
+            witness = _composites.pop(n)
             next = n + witness
-            while next in composites:
+            while next in _composites:
                 next += witness
-            composites[next] = witness
-        n += 1
-    for n in itertools.count():
-        yield prime_number(n)
+            _composites[next] = witness
 
 def primes_up_to(limit):
     """
