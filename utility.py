@@ -119,10 +119,6 @@ def figurate_numbers(size):
         d += step
 
 def primes():
-    """
-    >>> list(up_to(100, primes()))
-    [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
-    """
     composites = {} # A mapping from composite numbers to the smallest prime
                     # that is a factor of it (its witness).
     n = 2 # The current number being considered as a prime.
@@ -146,12 +142,11 @@ def primes_up_to(limit):
     """
     >>> primes_up_to(100)
     [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
-    >>> len(primes_up_to(1000000))
-    78498
+    >>> len(primes_up_to(100000))
+    9592
     """
     return list(up_to(limit, primes()))
 
-@memoize
 def prime_factorization(n):
     """
     Return the prime factors of n, as a tuple, including repeats.
