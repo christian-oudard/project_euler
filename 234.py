@@ -1,6 +1,6 @@
 import math
 from itertools import islice
-from utility import is_probable_prime, primes
+from utility import is_prime, primes
 
 def prime_sqrt(n):
     """
@@ -13,10 +13,10 @@ def prime_sqrt(n):
         raise ValueError(n)
     s = math.sqrt(n)
     lps = math.floor(s)
-    while not is_probable_prime(lps):
+    while not is_prime(lps):
         lps -= 1
     ups = math.ceil(s)
-    while not is_probable_prime(ups):
+    while not is_prime(ups):
         ups += 1
     return (lps, ups)
 
