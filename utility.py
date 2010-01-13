@@ -197,84 +197,121 @@ def prime_factorization(n):
             return factors
 
 def is_prime(n):
-    if n < 2:
-        return False
-    for i in up_to_sqrt_of(n):
-        if n % i == 0:
-            return False
-    return True
-
-_mrpt_num_trials = 5 # number of bases to test
-def is_probable_prime(n):
     """
     Miller-Rabin primality test.
 
     A return value of False means n is certainly not prime. A return value of
     True means n is very likely a prime.
 
-    >>> is_probable_prime(1)
+    >>> is_prime(1)
     False
-    >>> is_probable_prime(2)
+    >>> is_prime(2)
     True
-    >>> is_probable_prime(3)
+    >>> is_prime(3)
     True
-    >>> is_probable_prime(4)
+    >>> is_prime(4)
     False
-    >>> is_probable_prime(5)
+    >>> is_prime(5)
     True
-    >>> is_probable_prime(123456789)
+    >>> is_prime(123456789)
     False
 
-    >>> primes_under_1000 = [i for i in range(2, 1000) if is_probable_prime(i)]
-    >>> len(primes_under_1000)
-    168
-    >>> primes_under_1000[-10:]
-    [937, 941, 947, 953, 967, 971, 977, 983, 991, 997]
+    >>> [i for i in range(10000) if is_prime(i)] == list(up_to(10000, primes()))
+    True
 
-    >>> is_probable_prime(6438080068035544392301298549614926991513861075340134\
+    >>> pseudoprimes = [
+    ...     75792980677,
+    ...     21652684502221,
+    ...     3825123056546413051,
+    ...     318665857834031151167461,
+    ...     3317044064679887385961981,
+    ...     6003094289670105800312596501,
+    ...     59276361075595573263446330101,
+    ...     564132928021909221014087501701,
+    ...     1543267864443420616877677640751301,
+    ...     803837457453639491257079614341942108138837688287558145837488917\
+522297427376533365218650233616396004545791504202360320876656996\
+676098728404396540823292873879185086916685732826776177102938969\
+773947016708230428687109997439976544144845341155872450633409279\
+022275296229414984230688168540432645753401832978611129896064484\
+5216191652872597534901,
+    ... ]
+    >>> any(is_prime(ps) for ps in pseudoprimes)
+    False
+
+    >>> is_prime(6438080068035544392301298549614926991513861075340134\
 3291807343952413826484237063006136971539473913409092293733259038472039\
 7133335969549256322620979036686633213903952966175107096769180017646161\
 851573147596390153)
     True
 
-    >>> is_probable_prime(7438080068035544392301298549614926991513861075340134\
-3291807343952413826484237063006136971539473913409092293733259038472039\
-7133335969549256322620979036686633213903952966175107096769180017646161\
-851573147596390153)
+    >>> is_prime(2**61 - 1)
+    True
+    >>> is_prime(2**89 - 1)
+    True
+    >>> is_prime(2**607 - 1)
+    True
+    >>> is_prime(2**601 - 1)
     False
     """
-    if n < 2:
+    # Test for n in small primes.
+    small_primes = list(itertools.islice(primes(), 50))
+    if n <= max(small_primes):
+        return n in small_primes
+
+    # Test for even numbers.
+    if n & 1 == 0:
         return False
-    if n == 2:
-        return True
-    if n % 2 == 0:
+
+    # Use known pseudoprimes to prove primality within certain bounds.
+    # References:
+    # http://primes.utm.edu/prove/prove2_3.html
+    # http://www.trnicely.net/misc/mpzspsp.html
+    # http://mathworld.wolfram.com/StrongPseudoprime.html
+    def test_all(*bases):
+        return not any(test_composite(n, b) for b in bases)
+    if n < 1373653:
+        return test_all(2, 3)
+    if n < 170584961:
+        return test_all(350, 3958281543)
+    if n < 75792980677:
+        return test_all(2, 379215, 457083754)
+    if n < 21652684502221:
+        return test_all(2, 1215, 34862, 574237825)
+    if n < 10**16:
+        return test_all(2, 3, 7, 61, 24251)
+    if n < 3317044064679887385961981:
+        return test_all(*small_primes[:13])
+    # Fallback, test first fifty primes.
+    return test_all(*small_primes)
+
+def test_composite(n, base):
+    """
+    Perform a Miller-Rabin strong pseudoprime test for the base a. Return
+    True if n is definitely composite, or False if n is probably prime.
+    """
+    s, d = _factor_pow2(n - 1)
+    b = pow(base, d, n)
+    if b == 1:
         return False
-    # write n-1 as 2**s * d
-    # repeatedly try to divide n-1 by 2
+    for _ in range(s):
+        if b == n-1:
+            return False
+        b = b**2 % n
+    return True # n is definitely composite
+
+def _factor_pow2(n):
+    """
+    Factor powers of two from n. Return (s, d), with d odd, such that
+    n = 2**s * d.
+    """
     s = 0
-    d = n-1
-    while True:
-        quotient, remainder = divmod(d, 2)
-        if remainder == 1:
-            break
+    d = n
+    while not d & 1:
+        d >>= 1
         s += 1
-        d = quotient
-    assert(2**s * d == n-1)
-
-    # test the base a to see whether it is a witness for the compositeness of n
-    def try_composite(a):
-        if pow(a, d, n) == 1:
-            return False
-        for i in range(s):
-            if pow(a, 2**i * d, n) == n-1:
-                return False
-        return True # n is definitely composite
-
-    for i in range(_mrpt_num_trials):
-        a = random.randint(2, n-1)
-        if try_composite(a):
-            return False
-    return True # no base tested showed n as composite
+    assert 2**s * d == n
+    return s, d
 
 def totient(n):
     """
