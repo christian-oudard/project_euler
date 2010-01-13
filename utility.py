@@ -361,8 +361,9 @@ def all_pairs(iterable):
 
 def frequency_count(l):
     """
-    >>> frequency_count('aaabbc') == {'a': 3, 'b': 2, 'c': 1}
-    True
+    >>> fc = frequency_count('aaabbc')
+    >>> sorted(fc.items())
+    [('a', 3), ('b', 2), ('c', 1)]
     """
     frequencies = defaultdict(int)
     for i in l:
