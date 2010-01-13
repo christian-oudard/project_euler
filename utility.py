@@ -151,14 +151,6 @@ def prime_factorization(n):
     """
     Return the prime factors of n, as a tuple, including repeats.
 
-    >>> prime_factorization(1)
-    ()
-    >>> prime_factorization(2)
-    (2,)
-    >>> prime_factorization(4)
-    (2, 2)
-    >>> prime_factorization(8)
-    (2, 2, 2)
     >>> prime_factorization(12)
     (2, 2, 3)
     >>> prime_factorization(600851475143)
@@ -169,9 +161,17 @@ def prime_factorization(n):
     2000
     >>> all(f == 2 for f in pf)
     True
-    """
-    assert n > 0
 
+    >>> all(n == product(prime_factorization(n)) for n in range(-100, 100))
+    True
+    """
+    #TODO: improve algorithm so it can factor this number:
+    # >>> prime_factorization(1543267864443420616877677640751301)
+    # (27778299663977101, 55556599327954201)
+    if n < 0:
+        return (-1,) + prime_factorization(-n)
+    if n == 0:
+        return (0,)
     if n == 1:
         return ()
 
