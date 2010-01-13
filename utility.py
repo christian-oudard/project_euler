@@ -396,6 +396,26 @@ def all_pairs(iterable):
         for high_index, second_item in enumerated_values[low_index + 1:]:
             yield (first_item, second_item)
 
+def max_key(pair_sequence, key_func=None):
+    """
+    Return the key in the sequence that corresponds to the maximum value.
+
+    >>> max_key([('apples', 3), ('bananas', 7)])
+    'bananas'
+    >>> max_key([('apples', [1, 2, 3]), ('bananas', [3, 2])], key_func=len)
+    'apples'
+    """
+    if not key_func:
+        key_func = lambda x: x
+    pair_sequence = iter(pair_sequence)
+    max_key, max_value = next(pair_sequence)
+    max_value = key_func(max_value)
+    for key, value in pair_sequence:
+        value = key_func(value)
+        if value > max_value:
+            max_key, max_value = key, value
+    return max_key
+
 def frequency_count(l):
     """
     >>> fc = frequency_count('aaabbc')

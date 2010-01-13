@@ -1,3 +1,5 @@
+from utility import max_key
+
 def rep_digits(n, base=10):
     """
     Find the repeating digits of the decimal expansion of 1/n.
@@ -37,19 +39,5 @@ def rep_digits(n, base=10):
         seen_pairs.add(pair)
         digit_list.append(pair)
         order = rem * base
-
-def max_key(pair_sequence):
-    """
-    Return the key in the sequence that corresponds to the maximum value.
-
-    >>> max_key([('apples', 3), ('bananas', 7)])
-    'bananas'
-    """
-    pair_sequence = iter(pair_sequence)
-    max_key, max_value = next(pair_sequence)
-    for key, value in pair_sequence:
-        if value > max_value:
-            max_key, max_value = key, value
-    return max_key
 
 print(max_key((n, len(rep_digits(n))) for n in range(1, 1000)))
