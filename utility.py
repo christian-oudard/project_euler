@@ -67,6 +67,20 @@ def ilog(n, base):
         n //= base
     return count
 
+def sci_notation(n, prec=3):
+    """
+    Represent n in scientific notation, with the specified precision.
+
+    >>> sci_notation(1234 * 10**1000)
+    '1.234e1003'
+    >>> sci_notation(10**1000 // 2, prec=1)
+    '5.0e999'
+    """
+    base = 10
+    exponent = ilog(n, base)
+    mantissa = n / base**exponent
+    return '{0:.{1}f}e{2}'.format(mantissa, prec, exponent)
+
 def is_perfect_square(n):
     """
     Test to see if n is a perfect square.
