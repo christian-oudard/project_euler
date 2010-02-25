@@ -72,14 +72,14 @@ def sci_notation(n, prec=3):
     Represent n in scientific notation, with the specified precision.
 
     >>> sci_notation(1234 * 10**1000)
-    '1.234e1003'
+    '1.234e+1003'
     >>> sci_notation(10**1000 // 2, prec=1)
-    '5.0e999'
+    '5.0e+999'
     """
     base = 10
     exponent = ilog(n, base)
     mantissa = n / base**exponent
-    return '{0:.{1}f}e{2}'.format(mantissa, prec, exponent)
+    return '{0:.{1}f}e{2:+d}'.format(mantissa, prec, exponent)
 
 def is_perfect_square(n):
     """
