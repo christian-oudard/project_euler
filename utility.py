@@ -371,6 +371,17 @@ def coprime(a, b):
     """
     return gcd(a, b) == 1
 
+def divide_ceil(a, b):
+    """
+    Integer division, rounding up instead of down.
+    >>> divide_ceil(5, 2)
+    3
+    """
+    q, r = divmod(a, b)
+    if r > 0:
+        q += 1
+    return q
+
 def up_to(n, iterable):
     """Yield values from the iterable up to and including n."""
     return itertools.takewhile(lambda i: i <= n, iterable)
