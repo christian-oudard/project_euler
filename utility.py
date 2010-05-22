@@ -415,12 +415,6 @@ def nth(n, iterable):
     """
     return list(itertools.islice(iterable, n, n+1))[0]
 
-def all_pairs(iterable):
-    enumerated_values = list(enumerate(iterable))
-    for low_index, first_item in enumerated_values:
-        for high_index, second_item in enumerated_values[low_index + 1:]:
-            yield (first_item, second_item)
-
 def max_key(pair_sequence, key_func=None):
     """
     Return the key in the sequence that corresponds to the maximum value.
@@ -484,6 +478,18 @@ def proper_divisors(n):
             divisors.add(i)
             divisors.add(n//i)
     return sorted(list(divisors))
+
+def all_pairs(iterable):
+    """
+    Iterate over all possible pairs in the iterable, in lexicographic order.
+
+    >>> list(''.join(pair) for pair in all_pairs('abcd'))
+    ['ab', 'ac', 'ad', 'bc', 'bd', 'cd']
+    """
+    iterable = list(iterable)
+    for i, a in enumerate(iterable):
+        for b in iterable[i+1:]:
+            yield (a, b)
 
 def pairwise(iterable):
     """s -> (s0,s1), (s1,s2), (s2, s3), ...
