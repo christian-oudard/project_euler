@@ -57,4 +57,4 @@ def test():
 
 if __name__ == '__main__':
     #test()
-    print(find_nearest_fraction_neighbor(Fraction(3, 7), 1000000))
+    print(find_nearest_fraction_neighbor(Fraction(3, 7), 1000000).numerator)
