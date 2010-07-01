@@ -1,6 +1,7 @@
 visited_numbers = set()
 sequence_lengths = {1: 1}
-for i in reversed(range(1, 1000000)):
+limit = 1000000
+for i in range(limit // 2 + 1, limit, 2):
     # generate the partial sequence starting from i, until it reaches a visited number
     sequence = []
     while True:
@@ -8,13 +9,13 @@ for i in reversed(range(1, 1000000)):
         if i <= 1:
             break
         if i % 2 == 0:
-            next = i // 2
+            next_num = i // 2
         else:
-            next = 3*i + 1
+            next_num = (3*i + 1) // 2
         if i in visited_numbers:
             break
         visited_numbers.add(i)
-        i = next
+        i = next_num
     # figure out the whole sequence length for each number in the partial sequence
     last_num = i
     base_length = sequence_lengths[last_num]
