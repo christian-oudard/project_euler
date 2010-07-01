@@ -9,10 +9,17 @@ def eval_polynomial(coefficients, x):
     Example, evaluate x^2 + 2*x + 3 at x=4
     >>> eval_polynomial((1, 2, 3), 4)
     27
+    >>> eval_polynomial((2, -6, 2, -1), 3)
+    5
+
+    Simple efficiency test.
+    >>> n = 100000
+    >>> assert eval_polynomial(range(n), 2) == 2 ** n - n - 1
     """
+    # Use Horner's method http://en.wikipedia.org/wiki/Horner_scheme
     value = 0
-    for e, c in enumerate(reversed(coefficients)):
-        value += c * x**e
+    for c in coefficients:
+        value = value * x + c
     return value
 
 def prime_sequence_length(coefficients):
@@ -28,6 +35,7 @@ def prime_sequence_length(coefficients):
         if not is_prime(eval_polynomial(coefficients, n)):
             return n
 
+# We only need to check prime b, because we evaluate an n = 0, where the value == b.
 MAX_NUM = 1000 - 1
 max_poly = None
 max_length = 0
