@@ -210,6 +210,10 @@ def prime_factorization(n):
             factors = tuple(factors)
             return factors
 
+# First few primes to test against.
+_small_primes = list(itertools.islice(primes(), 500))
+_small_primes_set = set(_small_primes)
+
 def is_prime(n):
     """
     Miller-Rabin primality test.
@@ -269,9 +273,8 @@ def is_prime(n):
     False
     """
     # Test for n in small primes.
-    small_primes = list(itertools.islice(primes(), 50))
-    if n <= max(small_primes):
-        return n in small_primes
+    if n <= _small_primes[-1]:
+        return n in _small_primes_set
 
     # Test for even numbers.
     if n & 1 == 0:
@@ -295,9 +298,9 @@ def is_prime(n):
     if n < 10**16:
         return test_all(2, 3, 7, 61, 24251)
     if n < 3317044064679887385961981:
-        return test_all(*small_primes[:13])
+        return test_all(*_small_primes[:13])
     # Fallback, test first fifty primes.
-    return test_all(*small_primes)
+    return test_all(*_small_primes)
 
 def test_composite(n, base):
     """
