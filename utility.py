@@ -513,9 +513,9 @@ def tuplewise(n, iterable):
     [(1, 2, 3), (2, 3, 4)]
     """
     iters = itertools.tee(iterable, n)
-    for repeat, iter in enumerate(iters):
+    for repeat, it in enumerate(iters):
         for i in range(repeat):
-            next(iter)
+            next(it)
     return zip(*iters)
 
 def npr(n, r):
