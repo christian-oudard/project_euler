@@ -1,35 +1,21 @@
-from utility import figurate_numbers, up_to, isqrt
+from utility import figurate_numbers
 
-def is_pentagonal(n):
-    """
-    >>> limit = 1000
-    >>> pentagonal_numbers = set(up_to(limit, figurate_numbers(5)))
-    >>> for n in range(limit + 1):
-    ...     assert is_pentagonal(n) == (n in pentagonal_numbers)
-    """
-    # Test condition adapted from http://en.wikipedia.org/wiki/Pentagonal_number
-    a = 24 * n + 1
-    sqrt_a = isqrt(a)
-    if sqrt_a ** 2 != a:
-        return False
-    return (sqrt_a + 1) % 6 == 0
+def search_pentagonal_sum_difference():
+    # Find pentagonal numbers a and b such that a + b and a - b are also pentagonal.
+    # Treat c = a + b as fundamental, and derive b and a - b from it
+    # b = c - a
+    # (a - b) = a - (c - a) = 2 * a - c
+    seen = set()
+    seen_list = []
+    for c in figurate_numbers(5):
+        for a in seen_list:
+            b = c - a
+            a_minus_b = 2 * a - c
+            #assert a_minus_b == a - b
+            #assert a + b == c
+            if b in seen and a_minus_b in seen:
+                return a_minus_b
+        seen.add(c)
+        seen_list.append(c)
 
-def all_pairs_infinite(iterable):
-    """
-    Iterate over all possible pairs in the iterable, allowing for infinite
-    iterables.
-
-    >>> list(itertools.islice(all_pairs_infinite(itertools.count()), 7))
-    [(1, 0), (2, 0), (2, 1), (3, 0), (3, 1), (3, 2), (4, 0)]
-    """
-    iterable = iter(iterable)
-    seen = [next(iterable)]
-    for a in iterable:
-        for b in seen:
-            yield a, b
-        seen.append(a)
-
-for a, b in all_pairs_infinite(figurate_numbers(5)):
-    if is_pentagonal(a + b) and is_pentagonal(a - b):
-        print(a - b)
-        break
+print(search_pentagonal_sum_difference())
