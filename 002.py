@@ -1,11 +1,11 @@
-def iter_fibonacci(limit):
+from utility import up_to
+
+def fibonacci():
     a = 0
     b = 1
     yield a
-    yield b
-    while b <= limit:
-        c = a + b
-        yield c
-        a, b, = b, c
+    while True:
+        yield b
+        a, b = b, a + b
 
-print(sum(f for f in iter_fibonacci(4000000) if f % 2 == 0))
+print(sum(f for f in up_to(4000000, fibonacci()) if f % 2 == 0))
