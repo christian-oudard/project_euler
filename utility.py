@@ -177,6 +177,8 @@ def prime_factorization(n):
     (2, 2, 3)
     >>> prime_factorization(600851475143)
     (71, 839, 1471, 6857)
+    >>> prime_factorization(2**2**5 + 1)
+    (641, 6700417)
 
     >>> pf = prime_factorization(2**2000)
     >>> len(pf)
@@ -187,9 +189,18 @@ def prime_factorization(n):
     >>> all(n == product(prime_factorization(n)) for n in range(-100, 100))
     True
     """
-    #TODO: improve algorithm so it can factor this number:
+    #TODO: improve algorithm so it can factor these numbers quickly:
+    # >>> prime_factorization(21477639576571)
+    # (4410317, 4869863)
+    # >>> prime_factorization(12345678910111213141516)
+    # (2, 2, 2507191691, 1231026625769)
     # >>> prime_factorization(1543267864443420616877677640751301)
     # (27778299663977101, 55556599327954201)
+    # >>> prime_factorization(10**100 + 1)
+    # (73, 137, 401, 1201, 1601, 1676321, 5964848081, 129694419029057750551385771184564274499075700947656757821537291527196801)
+    # >>> prime_factorization(2**2**8 + 1)
+    # (1238926361552897, 93461639715357977769163558199606896584051237541638188580280321)
+
     if n < 0:
         return (-1,) + prime_factorization(-n)
     if n == 0:
