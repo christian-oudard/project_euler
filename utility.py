@@ -48,7 +48,7 @@ def isqrt(n):
     while abs(result - guess) > 1:
         guess = result
         result = (guess + n // guess) // 2
-    while result * result > n:
+    while result**2 > n:
         result -= 1
     return result
 
