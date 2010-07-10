@@ -169,6 +169,10 @@ def _gen_prime():
                 next += witness
             _composites[next] = witness
 
+# First few primes to test against.
+_small_primes = list(itertools.islice(primes(), 500))
+_small_primes_set = set(_small_primes)
+
 def prime_factorization(n):
     """
     Return the prime factors of n, as a tuple, including repeats.
@@ -210,6 +214,9 @@ def prime_factorization(n):
 
     factors = []
     while True:
+        if n in _small_primes_set:
+            factors.append(n)
+            break
         for p in up_to(isqrt(n), primes()):
             quotient, remainder = divmod(n, p)
             if remainder == 0:
@@ -218,12 +225,10 @@ def prime_factorization(n):
                 break # Continue while loop.
         else:
             factors.append(n)
-            factors = tuple(factors)
-            return factors
+            break
 
-# First few primes to test against.
-_small_primes = list(itertools.islice(primes(), 500))
-_small_primes_set = set(_small_primes)
+    factors = tuple(factors)
+    return factors
 
 def is_prime(n):
     """
@@ -311,7 +316,7 @@ def is_prime(n):
     if n < 3317044064679887385961981:
         return test_all(*_small_primes[:13])
     # Fallback, test first fifty primes.
-    return test_all(*_small_primes)
+    return test_all(*_small_primes[:50])
 
 def test_composite(n, base):
     """
