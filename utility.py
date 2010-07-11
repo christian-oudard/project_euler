@@ -544,6 +544,11 @@ def tuplewise(n, iterable):
             next(it)
     return zip(*iters)
 
+def all_equal(iterable):
+    iterable = iter(iterable)
+    first = next(iterable)
+    return all(first == i for i in iterable)
+
 def npr(n, r):
     """
     Calculate the number of ordered permutations of r items taken from a
