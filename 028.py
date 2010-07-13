@@ -8,6 +8,6 @@
 # ((2*r + 1)**2) + ((2*r + 1)**2 - 2*r) + ((2*r + 1)**2 - 4*r) + ((2*r + 1)**2 - 6*r)
 # == 4*(2*r + 1)**2 - 12*r
 
-SIZE = 1001 # The width of the outermost ring.
-num_rings = (SIZE + 1) // 2
+size = 1001 # The width of the outermost ring.
+num_rings = (size + 1) // 2
 print(1 + sum(4*(2*r + 1)**2 - 12*r for r in range(1, num_rings)))
