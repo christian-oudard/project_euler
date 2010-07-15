@@ -1,19 +1,3 @@
-# coding: utf8
-#In England the currency is made up of pound, £, and pence, p, and there are eight coins in general circulation:
-#
-#1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).
-#It is possible to make £2 in the following way:
-#
-#1x£1 + 1x50p + 2x20p + 1x5p + 1x2p + 3x1p
-#How many different ways can £2 be made using any number of coins?
-
-def valuation(values):
-    try:
-        values = values.items()
-    except AttributeError:
-        pass
-    return sum(value * count for value, count in values)
-
 def search_combinations(target_value, denominations):
     """
     >>> list(search_combinations(200, [200]))
@@ -36,10 +20,13 @@ def search_combinations(target_value, denominations):
     return _search_combinations(target_value, denominations)
 
 def _search_combinations(target_value, denominations):
-    if not denominations:
-        return
-
     biggest = denominations[0]
+
+    if len(denominations) == 1:
+        q, r = divmod(target_value, biggest)
+        if r == 0:
+            yield {biggest: q}
+            return
 
     for i in reversed(range(target_value // biggest + 1)):
         current = {biggest: i} if i > 0 else {}
