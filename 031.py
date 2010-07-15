@@ -33,110 +33,28 @@ def search_combinations(target_value, denominations):
     ...     {2: 2, 1: 1}, {2: 1, 1: 3}, {1: 5}])
     """
     denominations.sort(reverse=True)
-    biggest = denominations[0]
+    return _search_combinations(target_value, denominations)
 
-    q, r = divmod(target_value, biggest)
-    current = {biggest: q}
-    if r == 0:
-        yield current
-
-    if len(denominations) == 1:
+def _search_combinations(target_value, denominations):
+    if not denominations:
         return
 
-    #TODO combine this block into the loop after it
-    if r > 0:
-        for solution in search_combinations(r, denominations[1:]):
-            solution.update(current)
-            yield solution
+    biggest = denominations[0]
 
-    for i in reversed(range(q)):
-        if i == 0:
-            current = {}
-        else:
-            current = {biggest: i}
-        for solution in search_combinations(
-            target_value - valuation(current),
+    for i in reversed(range(target_value // biggest + 1)):
+        current = {biggest: i} if i > 0 else {}
+        current_value = biggest * i
+
+        if current_value == target_value:
+            yield current
+            continue
+
+        for solution in _search_combinations(
+            target_value - current_value,
             denominations[1:],
         ):
             solution.update(current)
             yield solution
 
-from copy import copy
-def search_iterative(target):
-    solutions = []
-    combination = {}
-    for twopound in range(target // 200 + 1):
-        combination[200] = twopound
-        for onepound in range(target // 100 + 1):
-            combination[100] = onepound
-            for fiftypence in range(target // 50 + 1):
-                combination[50] = fiftypence
-                for twentypence in range(target // 20 + 1):
-                    combination[20] = twentypence
-                    for tenpence in range(target // 10 + 1):
-                        combination[10] = tenpence
-                        for fivepence in range(target // 5 + 1):
-                            combination[5] = fivepence
-                            if valuation(combination) > target:
-                                break
-                            for twopence in range(target // 2 + 1):
-                                combination[2] = twopence
-                                value = valuation(combination)
-                                if value > target:
-                                    break
-                                onepence = target - value
-                                combination[1] = onepence
-
-                                solution = copy(combination)
-                                for key in list(solution.keys()):
-                                    if solution[key] == 0:
-                                        del solution[key]
-                                yield solution
-
-                                combination[1] = 0
-                            combination[2] = 0
-
-
-def main():
-    # Recursive
-    denominations = [200, 100, 50, 20, 10, 5, 2, 1]
-    combinations_recursive = list(search_combinations(200, denominations))
-    print('recursive')
-    print(len(combinations_recursive))
-
-    # Iterative
-    combinations_iterative = list(search_iterative(200))
-    print('iterative')
-    print(len(combinations_iterative))
-
-    def tupleize(combinations):
-        for c in combinations:
-            yield tuple(sorted(c.items(), reverse=True))
-    combinations_iterative = set(tupleize(combinations_iterative))
-    combinations_recursive = set(tupleize(combinations_recursive))
-
-    # Find gaps between the two.
-    not_in_iterative = []
-    for cr in combinations_recursive:
-        if cr not in combinations_iterative:
-            not_in_iterative.append(cr)
-    print('not in iterative', len(not_in_iterative))
-
-    not_in_recursive = []
-    for ci in combinations_iterative:
-        if ci not in combinations_recursive:
-            not_in_recursive.append(ci)
-    print('not in recursive', len(not_in_recursive))
-
-    combinations = sorted(combinations_recursive | combinations_iterative)
-
-    for c in combinations:
-        assert valuation(c) == 200
-
-    print(len(combinations))
-
-    for solution in not_in_recursive:
-        print(solution)
-
-if __name__ == '__main__':
-    main()
+denominations = [200, 100, 50, 20, 10, 5, 2, 1]
+print(len(list(search_combinations(200, denominations))))
