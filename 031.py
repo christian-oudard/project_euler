@@ -1,3 +1,4 @@
+# coding: utf8
 #In England the currency is made up of pound, £, and pence, p, and there are eight coins in general circulation:
 #
 #1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).
@@ -64,53 +65,47 @@ from copy import copy
 def search_iterative(target):
     solutions = []
     combination = {}
-    #for twopound in range(target // 200 + 1):
-    #    combination[200] = twopound
-    #    for onepound in range(target // 100 + 1):
-    #        combination[100] = onepound
-    #        for fiftypence in range(target // 50 + 1):
-    #            combination[50] = fiftypence
-    #for twentypence in range(target // 20 + 1):
-    #    combination[20] = twentypence
-    for tenpence in range(target // 10 + 1):
-        combination[10] = tenpence
-        for fivepence in range(target // 5 + 1):
-            combination[5] = fivepence
-            if valuation(combination) > target:
-                break
-            for twopence in range(target // 2 + 1):
-                combination[2] = twopence
-                value = valuation(combination)
-                if value > target:
-                    break
-                onepence = target - value
-                combination[1] = onepence
+    for twopound in range(target // 200 + 1):
+        combination[200] = twopound
+        for onepound in range(target // 100 + 1):
+            combination[100] = onepound
+            for fiftypence in range(target // 50 + 1):
+                combination[50] = fiftypence
+                for twentypence in range(target // 20 + 1):
+                    combination[20] = twentypence
+                    for tenpence in range(target // 10 + 1):
+                        combination[10] = tenpence
+                        for fivepence in range(target // 5 + 1):
+                            combination[5] = fivepence
+                            if valuation(combination) > target:
+                                break
+                            for twopence in range(target // 2 + 1):
+                                combination[2] = twopence
+                                value = valuation(combination)
+                                if value > target:
+                                    break
+                                onepence = target - value
+                                combination[1] = onepence
 
-                solution = copy(combination)
-                for key in list(solution.keys()):
-                    if solution[key] == 0:
-                        del solution[key]
-                yield solution
+                                solution = copy(combination)
+                                for key in list(solution.keys()):
+                                    if solution[key] == 0:
+                                        del solution[key]
+                                yield solution
 
-                combination[1] = 0
-            combination[2] = 0
+                                combination[1] = 0
+                            combination[2] = 0
 
 
 def main():
-    import pdb; pdb.set_trace()
-    list(search_combinations(10, [5, 2, 1]))
-    return
     # Recursive
-    #denominations = [200, 100, 50, 20, 10, 5, 2, 1]
-    #combinations_recursive = list(search_combinations(200, denominations))
-    denominations = [10, 5, 2, 1]
-    combinations_recursive = list(search_combinations(10, denominations))
+    denominations = [200, 100, 50, 20, 10, 5, 2, 1]
+    combinations_recursive = list(search_combinations(200, denominations))
     print('recursive')
     print(len(combinations_recursive))
 
     # Iterative
-    #combinations_iterative = list(search_iterative(200))
-    combinations_iterative = list(search_iterative(10))
+    combinations_iterative = list(search_iterative(200))
     print('iterative')
     print(len(combinations_iterative))
 
@@ -136,8 +131,7 @@ def main():
     combinations = sorted(combinations_recursive | combinations_iterative)
 
     for c in combinations:
-        #assert valuation(c) == 200
-        assert valuation(c) == 10
+        assert valuation(c) == 200
 
     print(len(combinations))
 
