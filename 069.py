@@ -1,12 +1,14 @@
-from utility import totient
+# The minimum totient compared to the size of n will always be from the product
+# of successive primes.
 
-max_ratio = 0
-max_n = 0
-for n in range(1, 1000000 + 1):
-    t = totient(n)
-    ratio = n / t
-    if ratio > max_ratio:
-        max_ratio = ratio
-        max_n = n
+from utility import primes
 
-print(max_n)
+limit = 1000000
+last = None
+result = 1
+for p in primes():
+    result *= p
+    if result > limit:
+        print(last)
+        break
+    last = result
