@@ -589,7 +589,13 @@ def digits_of(n, base=10):
     [1, 2, 3]
     >>> digits_of(0xabc, base=16)
     [10, 11, 12]
+    >>> digits_of(10**10000 - 1) == [9] * 10000
+    True
     """
+    # Early exit for base 10, does divmod stuff in C.
+    if base == 10:
+        return [int(d) for d in str(n)]
+
     if n == 0:
         return [0]
     digits = []
