@@ -189,10 +189,7 @@ def prime_factorization(n):
     >>> prime_factorization(2**2**5 + 1)
     (641, 6700417)
 
-    >>> pf = prime_factorization(2**2000)
-    >>> len(pf)
-    2000
-    >>> all(f == 2 for f in pf)
+    >>> prime_factorization(2**2000) == tuple([2] * 2000)
     True
 
     >>> all(n == product(prime_factorization(n)) for n in range(-100, 100))
@@ -355,11 +352,12 @@ def totient(n):
     Find the number of positive integers less than or equal to n that are
     coprime to n.
 
-    >>> [totient(n) for n in range(1, 70)]
+    >>> [totient(n) for n in range(1, 100)]
     [1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, 12, 6, 8, 8, 16, 6, 18, 8, 12, 10, \
 22, 8, 20, 12, 18, 12, 28, 8, 30, 16, 20, 16, 24, 12, 36, 18, 24, 16, 40, 12, \
 42, 20, 24, 22, 46, 16, 42, 20, 32, 24, 52, 18, 40, 24, 36, 28, 58, 16, 60, \
-30, 36, 32, 48, 20, 66, 32, 44]
+30, 36, 32, 48, 20, 66, 32, 44, 24, 70, 24, 72, 36, 40, 36, 60, 24, 78, 32, \
+54, 40, 82, 24, 64, 42, 56, 40, 88, 24, 72, 44, 60, 46, 72, 32, 96, 42, 60]
     >>> totient(0)
     0
     """
